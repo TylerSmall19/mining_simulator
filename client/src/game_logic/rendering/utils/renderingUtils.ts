@@ -3,7 +3,7 @@ import { Actor, Color, Vector } from "excalibur";
 
 const moveActor = (actor: Actor, moveToPosition: Vector, actorSpeed: number) => {
   const cursorActorName = 'moveCursor';
-  // clear previous move actions
+  // clear movement actions
   actor.actions.clearActions();
   // clear all cursor actors
   actor.scene?.actors.every((actor) => {
