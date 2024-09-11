@@ -1,10 +1,11 @@
 {
-  "name": "mining_simulator",
+  "name": "mining_simulator_client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@excaliburjs/plugin-tiled": "0.29.2",
     "@fontsource/roboto": "^5.0.14",
     "@mui/material": "^6.0.2",
     "@testing-library/jest-dom": "^5.17.0",
