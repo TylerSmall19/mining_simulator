@@ -23,3 +23,4 @@
 **/yarn-error.log*
 client/public/assets/map_assets/area_maps.tiled-project
 client/public/assets/map_assets/area_maps.tiled-session
+server/public/assets/maps/mining_maps/area_maps.tiled-session
