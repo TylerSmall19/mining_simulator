@@ -7,7 +7,6 @@ const moveActor = (actor: Actor, moveToPosition: Vector, actorSpeed: number) => 
   actor.actions.clearActions();
   // clear all cursor actors
   actor.scene?.actors.every((actor) => {
-    console.log(actor);
     if(actor.name === cursorActorName)
       actor.kill();
     return true;
