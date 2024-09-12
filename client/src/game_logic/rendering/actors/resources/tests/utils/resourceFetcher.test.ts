@@ -39,34 +39,33 @@ describe('Resource Fetcher', () => {
 
   describe('fetchByKeys', () => {
     it('fetches resources for the given keys', () => {
-      // ResourceFetcher.fetchOrLoadResource('copper_key')
       const givenMap = new Map([
         ['foo', new APIImageSource('foo/bar')],
         ['bar', new APIImageSource('buzz/bazz')],
         ['new', new ImageSource('bazz')]
       ]);
-      const expectedMap = new Map([
-        ['foo', givenMap.get('foo')],
-        ['new', givenMap.get('new')]
-      ]);
+      const expectedRes = [
+        givenMap.get('foo'),
+        givenMap.get('new')
+      ];
       expect(ResourceFetcher.getAllResources().size).toBe(0);
       ResourceFetcher.addResources(givenMap);
-      expect(ResourceFetcher.fetchByKeys(['foo', 'new'])?.keys()).toMatchObject(expectedMap.keys());
-      expect(ResourceFetcher.fetchByKeys(['foo', 'new'])?.values()).toEqual(expectedMap.values());
+      expect(ResourceFetcher.fetchByKeys(['foo', 'new'])).toEqual(expectedRes);
     });
   
-    xit('will fetch a resource by a given key', () => {
-      // ResourceFetcher.fetchOrLoadResource('copper_key')
-      const expectedMap = new Map([
+    it('will leave out keys not found', () => {
+      const givenMap = new Map([
         ['foo', new APIImageSource('foo/bar')],
         ['bar', new APIImageSource('buzz/bazz')],
         ['new', new ImageSource('bazz')]
       ]);
+      const expectedRes = [
+        givenMap.get('foo'),
+        givenMap.get('new')
+      ];
       expect(ResourceFetcher.getAllResources().size).toBe(0);
-      ResourceFetcher.addResources(expectedMap);
-      expect(ResourceFetcher.fetchByKeys(['foo'])).toBe(expectedMap.get('foo'));
-      expect(ResourceFetcher.fetchByKeys(['bar'])).toBe(expectedMap.get('bar'));
-      expect(ResourceFetcher.fetchByKeys(['new'])).toBe(expectedMap.get('new'));
+      ResourceFetcher.addResources(givenMap);
+      expect(ResourceFetcher.fetchByKeys(['foo', 'new', 'blewey'])).toEqual(expectedRes);
     });
   })
 });
