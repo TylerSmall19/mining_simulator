@@ -7,7 +7,6 @@ export type CopperVeinArgs = {  } & MineableArgs
 
 export class CopperVein extends Mineable {
   data: APIImageSource;
-  dataHasLoaded: boolean = false;
 
   constructor(args: CopperVeinArgs) {
     super({
@@ -17,7 +16,6 @@ export class CopperVein extends Mineable {
     });
     this.data = ResourceFetcher.fetchByKeys(['copper_vein'])![0] as APIImageSource
     }
-    
   override onInitialize(engine: Engine<any>): void {
     const texture = this.data.toSprite();
     this.graphics.use(texture);
