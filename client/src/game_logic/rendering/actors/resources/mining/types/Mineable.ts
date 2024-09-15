@@ -1,4 +1,4 @@
-import { Actor, ActorArgs } from "excalibur";
+import { ActorArgs } from "excalibur";
 import { MineableMineralTypes } from "./MineableMineralTypes";
 import { HarvestableResource } from "../../HarvestableResource";
 
@@ -24,9 +24,10 @@ export type MineableArgs = {
   resourceDetails: Map<string, any>
 } & ActorArgs
 
-export class Mineable extends HarvestableResource {
+export abstract class Mineable extends HarvestableResource {
   imageSource: string;
   type: MineableMineralTypes;
+  name: string;
 
   constructor(args: MineableArgs) {
     super(args);

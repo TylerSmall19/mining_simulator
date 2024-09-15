@@ -7,6 +7,7 @@ import { MineableMineralTypes } from "../types/MineableMineralTypes";
 export type CopperVeinArgs = {  } & MineableArgs
 
 export class CopperVein extends Mineable {
+  resourceType: MineableMineralTypes = MineableMineralTypes.Copper;
   textureSource: APIImageSource;
   static readonly key: MineableMineralTypes = MineableMineralTypes.Copper;
 

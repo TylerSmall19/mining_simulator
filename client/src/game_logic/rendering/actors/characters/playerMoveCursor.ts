@@ -1,5 +1,5 @@
 import { lightBlue } from "@mui/material/colors";
-import { Actor, ActorArgs, Color, Shape } from "excalibur";
+import { Actor, ActorArgs, Color } from "excalibur";
 
 export class PlayerMoveCursor extends Actor {
   static cursorKey: string = 'move_cursor'

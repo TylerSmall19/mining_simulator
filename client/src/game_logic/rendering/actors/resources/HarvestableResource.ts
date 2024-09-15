@@ -1,10 +1,12 @@
-import { Actor, ActorArgs } from "excalibur";
+import { Actor } from "excalibur";
 import { Rarities, RarityModifiers } from "./mining/types/Mineable";
+import { MineableMineralTypes } from "./mining/types/MineableMineralTypes";
 
-export class HarvestableResource extends Actor {
+export abstract class HarvestableResource extends Actor {
   capacity: number = 0;
   rarity: Rarities = Rarities.Common;
-  name: string = '';
+  abstract name: string;
+  abstract resourceType: MineableMineralTypes;
 
   harvest(miningAmount: number): number {
     const modifiedAmount = miningAmount * (RarityModifiers[this.rarity] || 1);
@@ -15,9 +17,5 @@ export class HarvestableResource extends Actor {
       this.kill();
       return this.capacity
     }
-  }
-
-  constructor(args: ActorArgs) {
-    super(args);
   }
 }
