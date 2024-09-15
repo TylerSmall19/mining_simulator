@@ -1,10 +1,13 @@
 import { TiledResource } from "@excaliburjs/plugin-tiled";
-import { CollisionType, Color, Engine, EngineOptions, ImageSource, Loadable, Loader } from "excalibur";
+import { Engine, EngineOptions, Loadable, Loader } from "excalibur";
 import { CopperVein } from "./rendering/actors/resources/mining/ores/CopperVein";
 import { ResourceFetcher } from "./rendering/actors/resources/utils/resourceFetcher";
+import { APIImageSource } from "./rendering/image_classes/APIImageSource";
+import { PlayerMiner } from "./rendering/actors/characters/playerMiner";
 
 let GameEngine: Engine = {} as Engine;
 const canvasId = 'game';
+
 const gameFieldMetaData: EngineOptions = {
   height: 600,
   width: 800,
@@ -12,12 +15,11 @@ const gameFieldMetaData: EngineOptions = {
   canvasElementId: canvasId
 }
 
-const copperKey = 'copper_vein';
-
 const init = () => {
   const loadableResources: Loadable<any>[] = [];
-  const imageSource = new ImageSource(process.env.REACT_APP_API_ROOT_DOMAIN + '/assets/maps/mining_maps/image_assets/copper_ore_1.png');
-  ResourceFetcher.addResources(new Map([[copperKey, imageSource]]));
+  const imageSource = new APIImageSource('/assets/maps/mining_maps/image_assets/copper_ore_1.png');
+  ResourceFetcher.addResources(new Map([[CopperVein.key, imageSource]]));
+  ResourceFetcher.addResources(new Map([[PlayerMiner.textureKey, new APIImageSource('/assets/characters/miners/male_miner_alt.png')]]))
   const tiledMap = new TiledResource(`${process.env.REACT_APP_API_ROOT_DOMAIN}/assets/maps/mining_maps/mine_area.tmj`, {
     useMapBackgroundColor: true,
     mapFormatOverride: 'TMJ',
@@ -34,32 +36,17 @@ const init = () => {
       }
     }
   });
+
   const loader = new Loader({ 
     fullscreenAfterLoad: false,
-    loadables: [tiledMap, ...(ResourceFetcher.fetchByKeys([copperKey]) || []), ...loadableResources]
+    loadables: [tiledMap, ...(ResourceFetcher.fetchByKeys([CopperVein.key, PlayerMiner.textureKey]) || []), ...loadableResources]
   });
 
   GameEngine = new Engine(gameFieldMetaData);
-  GameEngine.toggleDebug();
-  const actor = new CopperVein({
-    x: 450,
-    y: 450,
-    color: Color.Chartreuse,
-    height: 64,
-    width: 64,
-    visible: true,
-    collisionType: CollisionType.Fixed,
-    resourceDetails: new Map()
-  });
-  
+  // GameEngine.toggleDebug();
+
   return GameEngine.start(loader).then(() => {
-    actor.graphics.use((ResourceFetcher.fetchByKeys([copperKey])![0] as ImageSource).toSprite());
-    GameEngine.add(actor);
-    console.log('I am done loading the resources');
     tiledMap.addToScene(GameEngine.currentScene);
-    GameEngine.currentScene.actors.forEach((act) => {
-      console.log(act);
-    });
   });
 };
 
