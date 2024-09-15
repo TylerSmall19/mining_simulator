@@ -1,18 +1,16 @@
 import { Actor, ActorArgs } from "excalibur";
-
-export enum MineableMineralTypes {
-  Copper = "copper",
-  Tin = "tin",
-  Silver = 'silver',
-  Iron = 'iron',
-  Lead = 'lead',
-  Coal = 'coal'
-}
+import { MineableMineralTypes } from "./MineableMineralTypes";
+import { HarvestableResource } from "../../HarvestableResource";
 
 export enum Rarities {
   Common = 'common',
   Rare = 'rare'
 }
+
+export const RarityModifiers = {
+  [Rarities.Common]: 1,
+  [Rarities.Rare]: 1.25
+};
 
 export type MineableDetails = {
   capacity: string;
@@ -26,12 +24,9 @@ export type MineableArgs = {
   resourceDetails: Map<string, any>
 } & ActorArgs
 
-export class Mineable extends Actor {
-  capacity: number;
-  rarity: Rarities;
-  name: string;
-  type: MineableMineralTypes;
+export class Mineable extends HarvestableResource {
   imageSource: string;
+  type: MineableMineralTypes;
 
   constructor(args: MineableArgs) {
     super(args);
