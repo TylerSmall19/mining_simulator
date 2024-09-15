@@ -8,7 +8,6 @@ const startGame = () => {
     y: gameScript.getGameEngine().drawHeight - 40,
     collisionType: CollisionType.Active
   });
-  console.log('Player added:', player)
   gameScript.getGameEngine().add(player);
 };
 
