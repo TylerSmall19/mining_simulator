@@ -126,7 +126,30 @@
                  "name":"copper",
                  "properties":[
                         {
+                         "name":"name",
+                         "type":"string",
+                         "value":"copper"
+                        }, 
+                        {
                          "name":"type",
+                         "type":"string",
+                         "value":"ore"
+                        }],
+                 "rotation":0,
+                 "type":"ore",
+                 "visible":true,
+                 "width":60,
+                 "x":406.004273504273,
+                 "y":481.228632478632
+                }, 
+                {
+                 "gid":1,
+                 "height":60,
+                 "id":2,
+                 "name":"copper",
+                 "properties":[
+                        {
+                         "name":"name",
                          "type":"string",
                          "value":"copper"
                         }],
@@ -134,38 +157,24 @@
                  "type":"ore",
                  "visible":true,
                  "width":60,
-                 "x":351.25,
-                 "y":442.5
-                }, 
-                {
-                 "gid":1,
-                 "height":60,
-                 "id":2,
-                 "name":"copper",
-                 "rotation":0,
-                 "type":"ore",
-                 "visible":true,
-                 "width":60,
-                 "x":343.237179487179,
+                 "x":360.598290598291,
                  "y":790.737179487179
-                }, 
-                {
-                 "id":3,
-                 "template":"templates\/copper_ore.tj",
-                 "type":"ore",
-                 "x":490.833333333333,
-                 "y":465.416666666667
                 }, 
                 {
                  "gid":1,
                  "height":60,
                  "id":4,
-                 "name":"rich_copper",
+                 "name":"copper",
                  "properties":[
                         {
                          "name":"capacity",
                          "type":"float",
                          "value":250000
+                        }, 
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"copper"
                         }, 
                         {
                          "name":"rarity",
@@ -184,6 +193,12 @@
                  "height":60,
                  "id":5,
                  "name":"copper",
+                 "properties":[
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"copper"
+                        }],
                  "rotation":0,
                  "type":"ore",
                  "visible":true,
