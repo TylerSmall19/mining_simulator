@@ -14,6 +14,6 @@ export const GameWindow = (props: { children: ReactElement }) => {
     <Box sx={{marginBottom: '15px'}}>
       <Button onClick={handleStartClick} variant='contained' sx={{}}>Start Game</Button>
     </Box>
-    {props.children && props.children}
+    {props.children}
   </Box>);
 }
