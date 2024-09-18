@@ -1,8 +1,6 @@
+import { ADD_ITEM_EVENT, AddItemEvent } from "../../global_events/customEvents";
 import { MineableMineralTypes } from "../rendering/actors/resources/mining/types/MineableMineralTypes";
-
-export type InventoryShape = {
-  ores: Record<MineableMineralTypes, number>
-}
+import { InventoryShape } from "./PlayerInventoryTypes";
 
 export class PlayerInventory {
   private _inventory: InventoryShape = {
@@ -16,8 +14,15 @@ export class PlayerInventory {
   }
 
   async addItem(itemName: MineableMineralTypes, quantity: number): Promise<InventoryShape> {
-    this._inventory.ores[itemName] += quantity;
-    return this._inventory;
+    this._inventory = {
+      ...this._inventory,
+      ores: { 
+        ...this._inventory.ores, 
+        [itemName]: this._inventory.ores[itemName] + quantity
+      }
+    }
+    window.dispatchEvent(new AddItemEvent({ detail: { newInventory: this.snapshot } }))
+    return this.items;
   }
 
   get itemCount(): number {
@@ -28,7 +33,14 @@ export class PlayerInventory {
     }).reduce((acc, val) => (acc + val), 0)
   }
 
-  get inventory(): InventoryShape {
+  get items(): InventoryShape {
     return this._inventory;
+  }
+
+  /*
+  * This will return a snapshot of the object as a deep clone with no connections to the object
+  */
+  get snapshot(): InventoryShape {
+    return JSON.parse(JSON.stringify(this._inventory));
   }
 }
