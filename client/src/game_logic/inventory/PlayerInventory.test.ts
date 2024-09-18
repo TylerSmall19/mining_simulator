@@ -41,6 +41,9 @@ describe('PlayerInventory', () => {
     })
     await inv.addItem(MineableMineralTypes.Copper, 1000);
     expect(eventInv).toEqual(expectedInv);
+    window.removeEventListener(ADD_ITEM_EVENT, (ev) => {
+      eventInv = ev.detail.newInventory
+    });
   })
 
   describe('snapshot', () => {
