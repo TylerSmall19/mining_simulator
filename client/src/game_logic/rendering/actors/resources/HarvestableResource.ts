@@ -10,7 +10,7 @@ export abstract class HarvestableResource extends Actor {
 
   harvest(miningAmount: number): number {
     const modifiedAmount = miningAmount * (RarityModifiers[this.rarity] || 1);
-    if (this.capacity > this.capacity - modifiedAmount) {
+    if (this.capacity - modifiedAmount > 0) {
       this.capacity -= modifiedAmount
       return modifiedAmount;
     } else {

@@ -14,7 +14,7 @@ export class CopperVein extends Mineable {
   constructor(args: CopperVeinArgs) {
     super({
       ...args,
-      collisionType: CollisionType.Fixed,
+      collisionType: CollisionType.Passive,
       visible: true
     });
     this.textureSource = ResourceFetcher.fetchByKeys([CopperVein.key])![0] as APIImageSource;
