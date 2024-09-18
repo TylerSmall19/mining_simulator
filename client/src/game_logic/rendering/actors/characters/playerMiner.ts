@@ -1,11 +1,9 @@
-import { Actor, ActorArgs, Color, Engine, EventTypes, Vector } from "excalibur";
+import { Actor, ActorArgs, Engine, EventTypes, Timer, Vector } from "excalibur";
 import { APIImageSource } from "../../image_classes/APIImageSource";
 import { ResourceFetcher } from "../resources/utils/resourceFetcher";
-import { CopperVein } from "../resources/mining/ores/CopperVein";
 import { PlayerInventory } from "../../../inventory/PlayerInventory";
-import { MineableMineralTypes } from "../resources/mining/types/MineableMineralTypes";
-import { PlayerMoveCursor } from "./playerMoveCursor";
-import { HarvestableResource } from "../resources/HarvestableResource";
+import { PlayerMoveCursor } from "./PlayerMoveCursor";
+import { Mineable } from "../resources/mining/types/Mineable";
 
 export enum PlayerGenders {
   Male = 'm',
@@ -18,11 +16,15 @@ export type PlayerMinerArgs = {
   gender?: PlayerGenders;
 } & ActorArgs
 
+const miningTimer = 500;
+
 export class PlayerMiner extends Actor {
   gender: PlayerGenders;
   miningAmount: number = 100;
-  inventory: PlayerInventory = new PlayerInventory();
+  static inventory: PlayerInventory = new PlayerInventory();
   moveCursor?: Actor;
+  engine?: Engine;
+  harvestTimer?: Timer;
 
   static readonly textureKey: string = 'player_miner';
   constructor(options: PlayerMinerArgs) {
@@ -37,30 +39,40 @@ export class PlayerMiner extends Actor {
   }
 
   onInitialize(engine: Engine<any>): void {
+    this.engine = engine;
+
     engine.input.pointers.primary.on("down", (evt) => {
       this.movePlayer(evt.coordinates.worldPos, 150);
     });
 
     this.on(EventTypes.CollisionStart, (event) => {
       // check for collision with an ore
-      const copperActor = event.other as CopperVein
-      if (copperActor.name === MineableMineralTypes.Copper) {
+      const harvestableActor = event.other as Mineable
+      if (!!harvestableActor.harvest) {
+        this.mineResource(harvestableActor)
+        this.harvestTimer = new Timer({
+          interval: miningTimer,
+          repeats: true,
+          fcn: () => this.mineResource(harvestableActor)
+        });
+        // throw new Error('TODO: Polish up the mining logic (remove more bugs) and then move the collision logic into the copper ore');
         // stop moving
         this.actions.clearActions();
-        // kill the cursor
-        this.moveCursor?.kill();
-
-        // subtract the mining amount from the ore amount remaining
-        copperActor.capacity -= this.miningAmount;
-
-        // add the mined amount to the player inventory
-        this.inventory.addItem(MineableMineralTypes.Copper, this.miningAmount);
-
-        if (copperActor.capacity <= 0)
-        // if ore is depleted, kill it
-          copperActor.kill();
+        if (this.moveCursor?.active)
+          // kill the cursor
+          this.moveCursor?.kill();
+        this.engine?.addTimer(this.harvestTimer);
+        // start the timer for mining (using the config)
+        this.harvestTimer.start();
       }
     });
+
+    this.on(EventTypes.CollisionEnd, () => {
+      if (this.harvestTimer) {
+        this.harvestTimer?.cancel();
+        this.engine?.removeTimer(this.harvestTimer);
+      }
+    })
 
     switch (this.gender) {
       case PlayerGenders.Male:
@@ -80,10 +92,15 @@ export class PlayerMiner extends Actor {
   /*
   * returns a promise that resolves when the resource is harvested or depleted
   */
-  async harvestResource(resource: HarvestableResource): Promise<void> {
-    setInterval(() => {
-      // if (resource.)
-    }, 500)
+  async mineResource(resource: Mineable): Promise<void>  {
+    // subtract the mining amount from the ore amount remaining
+    const harvestedAmount = resource.harvest(this.miningAmount);
+    // add the mined amount to the player inventory
+    await PlayerMiner.inventory.addItem(resource.resourceType, harvestedAmount);
+
+    if (resource.isKilled()) {
+      this.harvestTimer?.cancel();
+    }
   }
 
   /* 
@@ -92,11 +109,6 @@ export class PlayerMiner extends Actor {
   async movePlayer (moveToPosition: Vector, actorSpeed: number): Promise<void> {
     // clear movement actions
     this.actions.clearActions();
-    // clear all cursor actors
-    // this.scene?.actors.forEach((actor) => {
-    //   if(actor.name === cursorActorName)
-    //     actor.kill();
-    // });
     if (this.moveCursor)
       this.moveCursor.pos = moveToPosition;
 

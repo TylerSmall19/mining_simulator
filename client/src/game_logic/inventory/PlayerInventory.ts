@@ -1,11 +1,14 @@
-import { ADD_ITEM_EVENT, AddItemEvent } from "../../global_events/customEvents";
+import { ADD_ITEM_EVENT, AddItemEvent } from "../../globals/customEvents";
 import { MineableMineralTypes } from "../rendering/actors/resources/mining/types/MineableMineralTypes";
 import { InventoryShape } from "./PlayerInventoryTypes";
+import isEqual from 'lodash.isequal';
 
 export class PlayerInventory {
   private _inventory: InventoryShape = {
     ores: { copper: 0, coal: 0, iron: 0, lead: 0, silver: 0, tin: 0 }
   } as InventoryShape;
+
+  private _inventoryCache: InventoryShape = {} as InventoryShape;
 
   constructor(inv?: InventoryShape) {
     if (inv) {
@@ -41,6 +44,8 @@ export class PlayerInventory {
   * This will return a snapshot of the object as a deep clone with no connections to the object
   */
   get snapshot(): InventoryShape {
-    return JSON.parse(JSON.stringify(this._inventory));
+    if (!isEqual(this._inventory, this._inventoryCache))
+      this._inventoryCache = JSON.parse(JSON.stringify(this._inventory));
+    return this._inventoryCache
   }
 }

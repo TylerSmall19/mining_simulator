@@ -1,4 +1,4 @@
-import { ADD_ITEM_EVENT } from "../../global_events/customEvents";
+import { ADD_ITEM_EVENT } from "../../globals/customEvents";
 import { MineableMineralTypes } from "../rendering/actors/resources/mining/types/MineableMineralTypes";
 import { PlayerInventory } from "./PlayerInventory"
 import { InventoryShape } from "./PlayerInventoryTypes";
