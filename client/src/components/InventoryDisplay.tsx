@@ -5,15 +5,15 @@ import { APIImageSource } from '../game_logic/rendering/image_classes/APIImageSo
 import { useEffect, useState } from 'react';
 import { InventoryShape } from '../game_logic/inventory/PlayerInventoryTypes';
 
-export const InventoryDisplay = (props: { inventory: InventoryShape }) => {
+export const InventoryDisplay = (props: { inventory: InventoryShape, itemCount: number }) => {
   const [showInventory, setShowInventory] = useState(false);
 
   useEffect(() => {
-    if (props.inventory) {
+    if (props.itemCount > 0) {
       setShowInventory(true)
     } else
       setShowInventory(false);
-  }, [])
+  }, [props.itemCount])
 
   const InventoryItem = ({imageSource, itemCount, itemKey}: { imageSource: string, itemCount: number, itemKey: string }) => (
     <Grid2 key={itemKey} size='grow'>
@@ -43,7 +43,8 @@ export const InventoryDisplay = (props: { inventory: InventoryShape }) => {
                 itemKey={invKey}
                 key={invKey}
               />
-            )
+            );
+          return null;
         })}
       </Grid2>
     </>);

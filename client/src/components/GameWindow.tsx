@@ -25,7 +25,7 @@ export const GameWindow = (props: { children: ReactElement }) => {
     <Box>
       <Box sx={{ marginBottom: '15px', marginTop: '15px' }}>
         <Button onClick={handleStartClick} variant='contained' sx={{}}>Go Mining</Button>
-        <InventoryDisplay inventory={inventory} />
+        <InventoryDisplay inventory={inventory} itemCount={PlayerMiner.inventory.itemCount} />
       </Box>
       {props.children}
     </Box>

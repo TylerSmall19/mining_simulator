@@ -1,4 +1,4 @@
-import { ADD_ITEM_EVENT, AddItemEvent } from "../../globals/customEvents";
+import { AddItemEvent } from "../../globals/customEvents";
 import { MineableMineralTypes } from "../rendering/actors/resources/mining/types/MineableMineralTypes";
 import { InventoryShape } from "./PlayerInventoryTypes";
 import isEqual from 'lodash.isequal';
