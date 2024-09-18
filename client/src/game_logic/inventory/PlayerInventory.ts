@@ -16,8 +16,8 @@ export class PlayerInventory {
   async addItem(itemName: MineableMineralTypes, quantity: number): Promise<InventoryShape> {
     this._inventory = {
       ...this._inventory,
-      ores: { 
-        ...this._inventory.ores, 
+      ores: {
+        ...this._inventory.ores,
         [itemName]: this._inventory.ores[itemName] + quantity
       }
     }
