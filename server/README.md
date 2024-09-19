@@ -44,19 +44,15 @@ Sync your changes (push/pull) whenever you make changes to those ENV files so we
 `cd` to the project root and `npm install`
 
 #### Signing and creating the test certiicates
-create secrets:
-```
-openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' \
-  -keyout private-key.pem -out certificate.pem
-```
+This will be the most difficult part of the process.
 
-create cert:
-```
-openssl pkcs12 -certpbe AES-256-CBC -export -out test_cert.pfx \
-  -inkey private-key.pem -in certificate.pem -passout pass:sample
-```
+View [this answer](https://stackoverflow.com/a/54083405/7988404) and [this blog post](https://www.freecodecamp.org/news/how-to-set-up-https-locally-with-create-react-app/) for more details on certs.
 
-These are in .gitignore by default, but make sure you create them in `cd server/` and not `client`.
+You will need to create certs with `mkcert` and you'll also have to initalize it according to the directions for your machine.
+
+You need to do this for the frontend as well.
+
+These are in .gitignore by default, but make sure you don't commit them accidentally.
 
 #### Running the project
 `npm run start:dev`
