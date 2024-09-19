@@ -43,6 +43,21 @@ Sync your changes (push/pull) whenever you make changes to those ENV files so we
 #### Install node packages
 `cd` to the project root and `npm install`
 
+#### Signing and creating the test certiicates
+create secrets:
+```
+openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' \
+  -keyout private-key.pem -out certificate.pem
+```
+
+create cert:
+```
+openssl pkcs12 -certpbe AES-256-CBC -export -out test_cert.pfx \
+  -inkey private-key.pem -in certificate.pem -passout pass:sample
+```
+
+These are in .gitignore by default, but make sure you create them in `cd server/` and not `client`.
+
 #### Running the project
 `npm run start:dev`
 
