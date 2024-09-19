@@ -24,3 +24,8 @@
 client/public/assets/map_assets/area_maps.tiled-project
 client/public/assets/map_assets/area_maps.tiled-session
 server/public/assets/maps/mining_maps/area_maps.tiled-session
+client/src/game_logic/my/personality.tsx
+client/src/game_logic/inventory/ThankYou.tsx
+server/private-key.pem
+server/test_cert.pfx
+server/certificate.pem
