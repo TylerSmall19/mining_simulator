@@ -20,7 +20,7 @@ export class CopperVein extends Mineable {
     this.textureSource = ResourceFetcher.fetchByKeys([CopperVein.key])![0] as APIImageSource;
   }
 
-  onPostKill(scene: Scene<unknown>): void {
+  override onPostKill(scene: Scene<unknown>): void {
     const respawn = () => {
       this.capacity = 10000;
       scene.add(this);
