@@ -30,3 +30,4 @@ server/private-key.pem
 server/test_cert.pfx
 server/certificate.pem
 client/.cert/**
+server/.cert/**
