@@ -1,0 +1,18 @@
+{ "object":
+    {
+     "gid":1,
+     "height":60,
+     "id":3,
+     "name":"copper",
+     "rotation":0,
+     "type":"ore",
+     "visible":true,
+     "width":60
+    },
+ "tileset":
+    {
+     "firstgid":1,
+     "source":"..\/tilesets\/resources.tsj"
+    },
+ "type":"template"
+}
