@@ -29,3 +29,4 @@ client/src/game_logic/inventory/ThankYou.tsx
 server/private-key.pem
 server/test_cert.pfx
 server/certificate.pem
+client/.cert/**
