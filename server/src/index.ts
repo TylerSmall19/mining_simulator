@@ -1,8 +1,11 @@
-import { Application, Request, Response } from "express";
+import { Application } from "express";
 import { IndexHandler } from "./IndexHandler";
 import dotenv from "dotenv";
 import { ROUTE_CONSTANTS } from "./routeConstants";
 import cors from 'cors';
+import { createServer } from 'https';
+import { readFileSync } from "fs";
+import { WebSockets } from "./websockets";
 
 dotenv.config();
 const express = require('express');
@@ -16,8 +19,22 @@ app.use(express.static('public'));
 
 app.get(ROUTE_CONSTANTS.apiRoot, IndexHandler);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+const options = {
+  cert: readFileSync('./.cert/localhost+2.pem'),
+  key: readFileSync('./.cert/localhost+2-key.pem'),
+};
+
+// Create the HTTP server
+const server = createServer(options, app);
+
+// Start the server
+server.listen(port, () => {
+  console.log('Server listening on port ' + port + '\n\r');
+});
+
+WebSockets(server)
+.catch((e) => {
+  console.error('something is wrong with the websockets:', e);
 });
 
 export default app;

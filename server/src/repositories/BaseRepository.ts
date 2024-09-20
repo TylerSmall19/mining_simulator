@@ -2,7 +2,7 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 
 export class BaseRepository {
   client?: MongoClient;
-  dbName: string = 'trackerApp';
+  dbName: string = 'miningGame';
 
   async connectToDB() {
     if (!this.client) {
@@ -24,7 +24,6 @@ export class BaseRepository {
   }
 
   async closeClient() {
-    if (this.client)
-      await this.client.close();
+    await this.client?.close();
   }
 }
