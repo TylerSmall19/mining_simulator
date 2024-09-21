@@ -1,5 +1,5 @@
 import { useCallback, useSyncExternalStore } from "react";
-import { PlayerMiner } from "../../game_logic/rendering/actors/characters/PlayerMiner";
+import { PlayerMiner } from "../../game_logic/rendering/actors/characters/PlayerMinerChar";
 import { ADD_ITEM_EVENT } from "../customEvents";
 
 export const usePlayerMinerInventory = () => {

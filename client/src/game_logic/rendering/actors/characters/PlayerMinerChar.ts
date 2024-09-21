@@ -2,8 +2,8 @@ import { Actor, ActorArgs, Engine, EventTypes, Timer, Vector } from "excalibur";
 import { APIImageSource } from "../../image_classes/APIImageSource";
 import { ResourceFetcher } from "../resources/utils/resourceFetcher";
 import { PlayerInventory } from "../../../inventory/PlayerInventory";
-import { PlayerMoveCursor } from "./PlayerMoveCursor";
 import { Mineable } from "../resources/mining/types/Mineable";
+import { PlayerMoveCursor } from "./playerMoveCursor";
 
 export enum PlayerGenders {
   Male = 'm',
