@@ -3,7 +3,7 @@ import { Engine, EngineOptions, Loadable, Loader } from "excalibur";
 import { CopperVein } from "./rendering/actors/resources/mining/ores/CopperVein";
 import { ResourceFetcher } from "./rendering/actors/resources/utils/resourceFetcher";
 import { APIImageSource } from "./rendering/image_classes/APIImageSource";
-import { PlayerMiner } from "./rendering/actors/characters/PlayerMinerChar";
+import { PlayerMiner } from "./rendering/actors/characters/PlayerMiner";
 
 let GameEngine: Engine = new Engine() as Engine;
 const canvasId = 'game';

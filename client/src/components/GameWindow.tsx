@@ -3,7 +3,7 @@ import { gameScript } from '../game_logic/gameScript';
 import { Box, Button } from '@mui/material';
 import { renderingEngine } from '../game_logic/rendering/renderingEngine';
 import { InventoryDisplay } from './InventoryDisplay';
-import { PlayerMiner } from '../game_logic/rendering/actors/characters/PlayerMinerChar';
+import { PlayerMiner } from '../game_logic/rendering/actors/characters/PlayerMiner';
 import { usePlayerMinerInventory } from '../globals/hooks/useAddItemSubscription';
 
 export const GameWindow = (props: { children: ReactElement }) => {
