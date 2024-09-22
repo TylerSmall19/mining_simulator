@@ -4,6 +4,7 @@ import { ResourceFetcher } from "../resources/utils/resourceFetcher";
 import { PlayerInventory } from "../../../inventory/PlayerInventory";
 import { Mineable } from "../resources/mining/types/Mineable";
 import { PlayerMoveCursor } from "./playerMoveCursor";
+import { MessageableActor } from "../shared/MessageableActor";
 
 export enum PlayerGenders {
   Male = 'm',
@@ -18,7 +19,7 @@ export type PlayerMinerArgs = {
 
 const miningTimer = 500;
 
-export class PlayerMiner extends Actor {
+export class PlayerMiner extends MessageableActor {
   gender: PlayerGenders;
   miningAmount: number = 100;
   static inventory: PlayerInventory = new PlayerInventory();
@@ -33,7 +34,6 @@ export class PlayerMiner extends Actor {
       width: 64,
       ...options
     });
-
     this.gender = options.gender || PlayerGenders.Male;
     this.body.bounciness = 0;
   }
