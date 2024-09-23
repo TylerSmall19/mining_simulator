@@ -1,7 +1,7 @@
 import { WebSocket } from "ws";
 
 export abstract class WebSocketHandler {
-  abstract handleMessage<T = Object>(message: T): void
+  abstract handleMessage(message: any): Promise<void>
   websocketConnection: WebSocket
   /**
    * the active websocket for the (validated) user
