@@ -1,8 +1,9 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
-export class BaseRepository {
+export abstract class BaseRepository {
   client?: MongoClient;
   dbName: string = 'miningGame';
+  abstract collectionName: string;
 
   async connectToDB() {
     if (!this.client) {
