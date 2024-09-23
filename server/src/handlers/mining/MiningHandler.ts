@@ -1,3 +1,4 @@
+import { Logger } from "../../logger/Logger";
 import { PlayerCharacterRepo } from "../../repositories/PlayerCharacterRepo";
 import { MessageTypes } from "../../shared/messages/MessageTypes";
 import { PlayerMessageTypes } from "../../shared/types/PlayerMessageTypes";
@@ -35,7 +36,7 @@ export class MiningHandler extends WebSocketHandler {
           }));
         }, miningInterval)
       } catch (e) {
-        console.error('Something went wrong in the Mining Handler:', e)
+        Logger.error('Something went wrong in the Mining Handler:', e)
       } finally {
         await playerCharRepo.closeClient();
       }

@@ -14,6 +14,8 @@ export class PlayerCharacterRepo extends BaseRepository {
   collectionName: string = 'playerCharacters';
 
   async getCharacterByID(id: string): Promise<PlayerCharacter> {
+    await this.init();
+
     if (!this.client)
       throw new Error('No DB client found');
 

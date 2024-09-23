@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { BaseRepository } from "./BaseRepository";
+import { Logger } from "../logger/Logger";
 
 export type GameSessionDocument = {
   maxBuyIn: number;
@@ -39,7 +40,7 @@ export class GameSessionRepository extends BaseRepository {
       };
       const result = await gameSessionCollection.insertOne(doc);
 
-      console.log(
+      Logger.info(
         `A document was inserted with the _id: ${result.insertedId}`,
       );
 

@@ -1,19 +1,14 @@
 import { Server } from "https";
 import { RawData, WebSocket } from "ws";
 import { safeJsonParse } from "../utils/parseUtils";
-import { MineableMineralTypes } from "../shared/types/MineableMineralTypes";
 import { PlayerMessageTypes } from "../shared/types/PlayerMessageTypes";
 import { MiningHandler } from "../handlers/mining/MiningHandler";
+import { Logger } from "../logger/Logger";
+import { MiningMessage } from "../handlers/types/MiningMessage";
 
 type WebsocketMessage = {
-  messageType: PlayerMessageTypes,
+  type: PlayerMessageTypes,
 }
-
-type MiningMessage = {
-  resourceType: MineableMineralTypes,
-  resourceID: string
-} & WebsocketMessage
-
 export const WebSockets = async (httpsServer: Server) => {
   const websocketServer = new WebSocket.Server({
     noServer: true,
@@ -29,27 +24,24 @@ export const WebSockets = async (httpsServer: Server) => {
   websocketServer.on(
     "connection",
     (websocketConnection, req) => {
-      console.log('Connection made!')
+      Logger.info('Connection made!')
       websocketConnection.on("message", (message: RawData, isBinary: boolean) => { 
         if (isBinary)
           return
 
         try {
           const parsedMessage = safeJsonParse<WebsocketMessage>(message.toString());
-          switch (parsedMessage?.messageType) {
+          switch (parsedMessage?.type) {
             case PlayerMessageTypes.Mine:
-              new MiningHandler((websocketConnection as unknown) as WebSocket)
+              const handler = new MiningHandler((websocketConnection as unknown) as WebSocket)
+              handler.handleMessage(parsedMessage as MiningMessage);
               break;
-          
             default:
               break;
           }
-          console.log('This is the parsed message', parsedMessage);
-          websocketConnection.send(JSON.stringify({
-            message: 'There be gold in them thar hills.'
-          }));
+          Logger.info('This is the parsed message', parsedMessage);
         } catch (ex) {
-          console.log('Something went wrong', ex)
+          Logger.error('Something went wrong', ex)
         }
       });
     }
