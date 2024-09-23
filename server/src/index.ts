@@ -6,6 +6,7 @@ import cors from 'cors';
 import { createServer } from 'https';
 import { readFileSync } from "fs";
 import { WebSockets } from "./websockets";
+import { Logger } from "./logger/Logger";
 
 dotenv.config();
 const express = require('express');
@@ -29,12 +30,12 @@ const server = createServer(options, app);
 
 // Start the server
 server.listen(port, () => {
-  console.log('Server listening on port ' + port + '\n\r');
+  Logger.info('Server listening on port ' + port + '\n\r');
 });
 
 WebSockets(server)
 .catch((e) => {
-  console.error('something is wrong with the websockets:', e);
+  Logger.error('something is wrong with the websockets:', e);
 });
 
 export default app;
