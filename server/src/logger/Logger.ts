@@ -7,3 +7,7 @@ export class Logger {
     console.error(msg, ...err);
   }
 }
+
+export const errorCatch = (msg: string) => (ex: any) => {
+  Logger.error(msg, ex)
+}

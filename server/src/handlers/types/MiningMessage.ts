@@ -1,7 +1,7 @@
 import { PlayerMessageTypes } from "../../shared/types/PlayerMessageTypes"
 
 export type MiningMessage = {
-  userId: string,
+  playerID: string,
   characterID: string,
   type: PlayerMessageTypes.Mine,
   resourceID: string
