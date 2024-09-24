@@ -49,8 +49,6 @@ export class MiningHandler extends WebSocketHandler {
           throw new Error (`character not found on player: userID: ${message.playerID} charID: ${message.characterID}`);
       } catch (e) {
         Logger.error('Something went wrong in the Mining Handler:', e)
-      } finally {
-        await playerCharRepo.closeClient();
       }
     }
   }
