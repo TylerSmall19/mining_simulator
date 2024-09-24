@@ -24,17 +24,23 @@ export const WebSockets = async (httpsServer: Server) => {
   websocketServer.on(
     "connection",
     (websocketConnection, req) => {
+      // spin up the handlers
+      const miningHandler = new MiningHandler();
+
       Logger.info('Connection made!')
-      websocketConnection.on("message", (message: RawData, isBinary: boolean) => { 
+      websocketConnection.on("message", (message: RawData, isBinary: boolean) => {
         if (isBinary)
           return
 
+        miningHandler.saveWebsocketConnection(websocketConnection);
         try {
           const parsedMessage = safeJsonParse<WebsocketMessage>(message.toString());
           switch (parsedMessage?.type) {
             case PlayerMessageTypes.Mine:
-              const handler = new MiningHandler((websocketConnection as unknown) as WebSocket)
-              handler.handleMessage(parsedMessage as MiningMessage);
+              miningHandler.handleMessage(parsedMessage as MiningMessage);
+              break;
+            case PlayerMessageTypes.StopMine:
+              miningHandler.handleMessage(parsedMessage as MiningMessage, true);
               break;
             default:
               break;
