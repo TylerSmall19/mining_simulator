@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Logger } from "../../logger/Logger";
-import { PlayerUserDetailsRepo } from "../../repositories/UserDetailsRepo";
+import { PlayerUserDetailsRepo } from "../../repositories/PlayerUserDetailsRepo";
 import { MessageTypes } from "../../shared/messages/MessageTypes";
 import { PlayerMessageTypes } from "../../shared/types/PlayerMessageTypes";
 import { WebSocketHandler } from "../shared/handlers/WebSocketHandler";
