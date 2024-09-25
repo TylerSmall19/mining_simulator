@@ -32,3 +32,4 @@ server/certificate.pem
 client/.cert/**
 server/.cert/**
 server/public/assets/maps/mining_maps/area_maps.tiled-session
+server/globalConfig.json
