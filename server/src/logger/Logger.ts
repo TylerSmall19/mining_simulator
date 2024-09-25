@@ -8,6 +8,6 @@ export class Logger {
   }
 }
 
-export const errorCatch = (msg: string) => (ex: any) => {
+export const logErrorCallback = (msg: string) => (ex: any) => {
   Logger.error(msg, ex)
 }

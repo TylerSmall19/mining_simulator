@@ -1,6 +1,6 @@
 import { ObjectId, Db } from "mongodb";
 import { BaseRepository } from "./BaseRepository";
-import { Logger, errorCatch } from "../logger/Logger";
+import { Logger, logErrorCallback } from "../logger/Logger";
 
 export type PlayerCharacter = {
   characterID: string,
@@ -73,7 +73,8 @@ export class PlayerUserDetailsRepo extends BaseRepository {
   }
 
   async getCharacterByID(id: string): Promise<PlayerCharacter> {
-    await this.init();
+    if (!this.playerDetailsDB)
+      await this.init();
 
     if (!this.client)
       throw new Error('No DB client found');
@@ -127,7 +128,7 @@ export class PlayerUserDetailsRepo extends BaseRepository {
     const user = await this.playerDetailsDB
       ?.collection<UserDetails>(this.collectionName)
       .findOne({ _id: new ObjectId(userId) })
-      .catch(errorCatch(errorMsg));
+      .catch(logErrorCallback(errorMsg));
 
     if (user) {
       this.user = user;
