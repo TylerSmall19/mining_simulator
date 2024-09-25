@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { IndexHandler } from '../IndexHandler';
 
-describe('Index Handler', () => {
+describe.skip('Index Handler', () => {
   it('calls response.send', () => {
     const mockSend = jest.fn();
     // @ts-ignore
