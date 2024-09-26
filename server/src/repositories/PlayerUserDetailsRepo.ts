@@ -21,13 +21,15 @@ export type Item = {
   }[]
 }
 
+export type PlayerSkill = {
+  name: 'mining',
+  level: number,
+  xp: number
+}
+
 /** @param miningInterval: the number of MS that a miner takes to mine new resources */
-export type UserDetails = {
-  skills: [{
-    name: 'mining',
-    level: number,
-    xp: number
-  }],
+export type PlayerDetails = {
+  skills: PlayerSkill[],
   characters: {
     _id: ObjectId,
     name: string,
@@ -39,11 +41,16 @@ export type UserDetails = {
     }
   }[],
   inventory: Invetory,
-  _id: ObjectId
+  _id: ObjectId,
+  playerName: string
 }
 
 export type Invetory = {
   items: Item[]
+}
+
+export type PlayerCreateOptions = {
+  playerName: string
 }
 
 /** 
@@ -58,8 +65,8 @@ export class PlayerUserDetailsRepo extends BaseRepository {
   // collectionName: string = 'playerCharacters';
   collectionName: string = 'playerGameDetails';
   inventory: Invetory | null = null;
+  user: PlayerDetails | null = null;
   playerDetailsDB: Db | null = null;
-  user: UserDetails | null = null;
 
   async init(): Promise<void> {
     await super.init()
@@ -76,11 +83,7 @@ export class PlayerUserDetailsRepo extends BaseRepository {
     if (!this.playerDetailsDB)
       await this.init();
 
-    if (!this.client)
-      throw new Error('No DB client found');
-
-    const myDB = this.client.db(this.dbName);
-    const gameSessionCollection = myDB.collection<PlayerCharacter>(this.collectionName);
+    const gameSessionCollection = this.playerDetailsDB!.collection<PlayerCharacter>(this.collectionName);
 
     const result = await gameSessionCollection.findOne({
       _id: new ObjectId(id)
@@ -113,8 +116,47 @@ export class PlayerUserDetailsRepo extends BaseRepository {
     return this.inventory;
   }
 
+  /** 
+   * This method will throw an error if the playername exists, so be sure to verify uniqueness before submitting to the
+   * DB to make the user experience more fluid.
+   * 
+   * Will return undefined if it's unable to insert the player an will throw an error if name is not unique
+   * 
+   * Will add an empty user with no characters
+   */
+  async createNewPlayer (playerOptions: PlayerCreateOptions): Promise<PlayerDetails | undefined> {
+    if (!this.playerDetailsDB)
+      await this.init();
+
+    const playerCollection = this.playerDetailsDB!.collection<PlayerDetails>(this.collectionName);
+    const newPlayer = {
+      playerName: playerOptions.playerName,
+      characters: [],
+      inventory: { items: [] },
+      skills: [],
+      _id: new ObjectId()
+    }
+
+    const duplicatePlayerName = await this.playerDetailsDB
+      ?.collection<PlayerDetails>(this.collectionName)
+      .findOne({ playerName: playerOptions.playerName })
+      .catch(logErrorCallback('Call crashed while searching for duplicate playerName.'));
+
+    if (duplicatePlayerName)
+      throw new Error('Duplicate playerName found: ' + playerOptions.playerName);
+
+    const result = await playerCollection
+      .insertOne(newPlayer)
+      .catch(logErrorCallback('Player could not be created.'));
+
+    if (result && result.insertedId) {
+      this.user = newPlayer;
+      return newPlayer
+    }
+  }
+
   /** player added ID: 66f2d5a999c8ab8eeea59c0e */
-  async getPlayerbyID(userId: string): Promise<UserDetails> {
+  async getPlayerbyID(userId: string): Promise<PlayerDetails> {
     Logger.info('Fetching the player details for:', userId)
     if (this.user)
       return this.user;
@@ -126,7 +168,7 @@ export class PlayerUserDetailsRepo extends BaseRepository {
     }
 
     const user = await this.playerDetailsDB
-      ?.collection<UserDetails>(this.collectionName)
+      ?.collection<PlayerDetails>(this.collectionName)
       .findOne({ _id: new ObjectId(userId) })
       .catch(logErrorCallback(errorMsg));
 
