@@ -130,7 +130,7 @@ export class PlayerUserDetailsRepo extends BaseRepository {
 
     const playerCollection = this.playerDetailsDB!.collection<PlayerDetails>(this.collectionName);
     const newPlayer = {
-      playerName: playerOptions.playerName,
+      playerName: playerOptions.playerName.toString(),
       characters: [],
       inventory: { items: [] },
       skills: [],
