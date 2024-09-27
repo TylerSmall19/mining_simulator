@@ -1,5 +1,5 @@
 import { Logger } from "../../logger/Logger";
-import { PlayerCharacterRepo } from "../../repositories/PlayerCharacterRepo";
+import { PlayerUserDetailsRepo } from "../../repositories/PlayerUserDetailsRepo";
 import { MessageTypes } from "../../shared/messages/MessageTypes";
 import { PlayerMessageTypes } from "../../shared/types/PlayerMessageTypes";
 import { WebSocketHandler } from "../shared/handlers/WebSocketHandler";
@@ -10,35 +10,53 @@ enum MineableMineralType {
 }
 
 export class MiningHandler extends WebSocketHandler {
-  async handleMessage(message: MiningMessage): Promise<void> {
+  miningIntervalIDs: NodeJS.Timeout[] = [];
+  playerCharRepo: PlayerUserDetailsRepo = new PlayerUserDetailsRepo();
+
+  async handleMessage(message: MiningMessage, stopMining?: boolean): Promise<void> {
+    if (stopMining) {
+      this.miningIntervalIDs.forEach((timeout) => {
+        clearInterval(timeout);
+      })
+    }
     if (message && message.type === PlayerMessageTypes.Mine) {
       // Pull the user by UserID
 
       // Pull the playerChar from playerCharID
 
       // Verify the locations of each resource
-      const playerCharRepo = new PlayerCharacterRepo();
+      // const playerCharRepo = new PlayerUserDetailsRepo();
 
       try {
-        const playerCharacter = await playerCharRepo.getCharacterByID(message.characterID);
+        // pull the player data from the DB
+        const playerCharacter = await this.playerCharRepo.getPlayerbyID(message.playerID);
         // Pull the resource from the DB
-        
+
         // Do the required math for the modifier of base and rarity
-        const amount = playerCharacter.baseMiningAmount;
-        const miningInterval = 300;
-        
-        // Set the timer  send the message to the client
-        setInterval(() => {
-          this.websocketConnection.send(JSON.stringify({
-            messageType: MessageTypes.Mining,
-            amount: amount,
-            oreType: MineableMineralType.Copper
-          }));
-        }, miningInterval)
+        // hardcoded into the DB: 66f2d819a35876bd34a37c0c
+        const minerCharacter = playerCharacter.characters.find((char) => char._id.toString() === message.characterID)
+        if (minerCharacter) {
+          const characterBaseAmount = minerCharacter.stats.mining.baseAmount;
+          const miningInterval = minerCharacter.stats.mining.miningInterval;
+
+          // Set the timer to send the message to the client
+          this.miningIntervalIDs.push(setInterval(() => {
+            if (this.websocketConnection)
+              this.websocketConnection.send(JSON.stringify({
+                msg: 
+                {
+                  messageType: MessageTypes.Mining,
+                  amount: characterBaseAmount,
+                  oreType: MineableMineralType.Copper
+                },
+                character: minerCharacter,
+                player: playerCharacter
+              }));
+          }, miningInterval))
+        } else
+          throw new Error (`character not found on player: userID: ${message.playerID} charID: ${message.characterID}`);
       } catch (e) {
         Logger.error('Something went wrong in the Mining Handler:', e)
-      } finally {
-        await playerCharRepo.closeClient();
       }
     }
   }
@@ -47,6 +65,7 @@ export class MiningHandler extends WebSocketHandler {
   playerInventory: any = {};
 
   harvestResource(resourceID: string) {
+
     return !!resourceID;
   }
 }

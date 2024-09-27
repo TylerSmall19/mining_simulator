@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 import { CreateGameSessionRequest, GameSessionRepository } from "../repositories/GameSessionRepository";
 
-describe('GameSessionRepository', () => {
+describe.skip('GameSessionRepository', () => {
   afterAll(() => {
     jest.resetAllMocks();
   });

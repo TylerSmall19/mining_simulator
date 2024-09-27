@@ -5,6 +5,13 @@ export abstract class BaseRepository {
   dbName: string = 'miningGame';
   abstract collectionName: string;
 
+  /**
+   *
+   */
+  constructor(client?: MongoClient) {
+    this.client = client;
+  }
+
   async connectToDB() {
     if (!this.client) {
       this.client = new MongoClient(process.env.MONGO_CONNECTION_STRING || '', {

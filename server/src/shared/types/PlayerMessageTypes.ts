@@ -12,4 +12,5 @@ export enum PlayerMessageTypes {
   Mine = 'mine',
   Inventory = 'inventory',
   Market = 'market',
+  StopMine = 'stopmine'
 }
