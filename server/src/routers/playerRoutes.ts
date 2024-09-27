@@ -20,10 +20,11 @@ const createPlayer = async (req: express.Request, res: express.Response) => {
         .json(createdPlayer);
     }
   } catch (e) {
-    Logger.error('Unable to add the player', e);
+    const msg = 'Unable to add player'
+    Logger.error(msg, e);
     res
       .status(422)
-      .send('Enable to add player');
+      .send(msg);
   }
 }
 
