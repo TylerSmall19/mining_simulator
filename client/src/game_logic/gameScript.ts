@@ -1,11 +1,12 @@
 import { TiledResource } from "@excaliburjs/plugin-tiled";
-import { Engine, EngineOptions, Loadable, Loader } from "excalibur";
+import { EngineOptions, Loadable, Loader } from "excalibur";
 import { CopperVein } from "./rendering/actors/resources/mining/ores/CopperVein";
 import { ResourceFetcher } from "./rendering/actors/resources/utils/resourceFetcher";
 import { APIImageSource } from "./rendering/image_classes/APIImageSource";
 import { PlayerMiner } from "./rendering/actors/characters/PlayerMiner";
+import { GameEngine } from "./resources/custom_classes/GameEngine";
 
-let GameEngine: Engine = new Engine() as Engine;
+let _gameEngine: GameEngine = new GameEngine();
 const canvasId = 'game';
 
 const gameFieldMetaData: EngineOptions = {
@@ -43,16 +44,16 @@ const init = () => {
     loadables: [tiledMap, ...(ResourceFetcher.fetchByKeys([CopperVein.key, PlayerMiner.textureKey]) || []), ...loadableResources]
   });
 
-  GameEngine = new Engine(gameFieldMetaData);
-  GameEngine.toggleDebug();
+  _gameEngine = new GameEngine(gameFieldMetaData);
+  // _gameEngine.toggleDebug();
 
-  return GameEngine.start(loader).then(() => {
-    tiledMap.addToScene(GameEngine.currentScene);
+  return _gameEngine.start(loader).then(() => {
+    tiledMap.addToScene(_gameEngine.currentScene);
   });
 };
 
 export const gameScript = {
-  getGameEngine: () => GameEngine,
+  getGameEngine: () => _gameEngine,
   canvasId,
   init,
   gameFieldMetaData
