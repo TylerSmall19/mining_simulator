@@ -32,14 +32,13 @@ export class GameEngine extends Engine {
     } else if (this._activePlayer) {
       return cloneDeep(this._activePlayer);
     }
-
     return null;
   }
 
   /**
-   * Prioritize using window.localstorage first since it can stick around after refresh.
+   * Prioritizes using window.localstorage first since it can stick around after refresh.
    * 
-   * _activePlayer is a fallback incase localstorage access isn't allowed for some reason
+   * _activePlayer is an internal fallback in case localstorage access isn't allowed for some reason
    */
   set activePlayer(activePlayer: PlayerDetails | null) {
     if (activePlayer) {
@@ -48,6 +47,7 @@ export class GameEngine extends Engine {
       window.dispatchEvent(new SetActivePlayerEvent({ detail: { activePlayer }}));
     } else {
       window.localStorage.removeItem(this._activePlayerStorageKey);
+      window.dispatchEvent(new SetActivePlayerEvent({ detail: undefined}));
       this.activePlayer = null;
     }
   }
