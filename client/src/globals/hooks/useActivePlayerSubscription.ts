@@ -1,6 +1,6 @@
 import { useCallback, useSyncExternalStore } from "react";
 import { SET_ACTIVE_PLAYER_EVENT } from "../customEvents";
-import { gameScript } from "../../game_logic/gameScript";
+import { gameScript } from "../../game_logic";
 
 export const usePlayerMinerInventory = () => {
   const subscribe = useCallback((callback: () => void) => {

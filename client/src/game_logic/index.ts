@@ -16,7 +16,14 @@ const gameFieldMetaData: EngineOptions = {
   canvasElementId: canvasId
 }
 
+/**
+ * This is for initializing the game. Currently it will render the loader to the canvas with ID 'game'
+ * 
+ * @returns the game engine that was started by the script
+ */
 const init = () => {
+  // After the game is started, check if 
+
   const loadableResources: Loadable<any>[] = [];
   const imageSource = new APIImageSource('/assets/maps/mining_maps/image_assets/copper_ore_1.png');
   ResourceFetcher.addResources(new Map([[CopperVein.key, imageSource]]));
@@ -49,6 +56,7 @@ const init = () => {
 
   return _gameEngine.start(loader).then(() => {
     tiledMap.addToScene(_gameEngine.currentScene);
+    return _gameEngine;
   });
 };
 

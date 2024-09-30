@@ -1,5 +1,5 @@
 import { CollisionType } from "excalibur";
-import { gameScript } from "../gameScript";
+import { gameScript } from "../";
 import { PlayerMiner } from "./actors/characters/PlayerMiner";
 
 const startGame = () => {

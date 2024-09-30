@@ -1,6 +1,6 @@
 import { ChangeEventHandler, FormEventHandler, ReactElement, useCallback, useState } from 'react';
-import { gameScript } from '../game_logic/gameScript';
-import { Box, Button, FormControl, FormHelperText, Input, InputLabel } from '@mui/material';
+import { gameScript } from '../game_logic';
+import { Box, Button, FormControl, FormHelperText, Input, InputLabel, TextField } from '@mui/material';
 import { renderingEngine } from '../game_logic/rendering/renderingEngine';
 import { InventoryDisplay } from './InventoryDisplay';
 import { PlayerMiner } from '../game_logic/rendering/actors/characters/PlayerMiner';
@@ -34,16 +34,19 @@ export const GameWindow = (props: { children: ReactElement }) => {
     <Box>
       <Box sx={{ marginBottom: '15px', marginTop: '15px' }}>
         <FormControl component='form' onSubmit={handleCreate}>
-          <InputLabel htmlFor='my-input'>Player Display Name</InputLabel>
-          <Input
+          <TextField
+            sx={{ input: { color: 'whitesmoke'}}}
             id='playerName'
             name='playerName'
             aria-describedby='my-helper-text'
             value={playerFormValues.playerName}
             onChange={handleChange}
+            helperText='Choose the display name'
+            label='Player Name'
+            variant='outlined'
+            color='secondary'
           />
-          <FormHelperText id='my-helper-text'>Choose the display name of your Player.</FormHelperText>
-          <Button type='submit' variant='contained' sx={{}}>Go Mining</Button>
+          <Button type='submit' variant='contained'>Login</Button>
         </FormControl>
         <InventoryDisplay inventory={inventory} itemCount={PlayerMiner.inventory.itemCount} />
       </Box>

@@ -1,6 +1,6 @@
 import './App.css';
 import { GameWindow } from './components/GameWindow';
-import { gameScript } from './game_logic/gameScript';
+import { gameScript } from './game_logic';
 
 function App() {
   return (
