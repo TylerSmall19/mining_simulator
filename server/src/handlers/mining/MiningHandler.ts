@@ -39,6 +39,8 @@ export class MiningHandler extends WebSocketHandler {
           const characterBaseAmount = minerCharacter.stats.mining.baseAmount;
           const miningInterval = minerCharacter.stats.mining.miningInterval;
 
+          // Factor in the rarity multiplier
+
           // Set the timer to send the message to the client
           this.miningIntervalIDs.push(setInterval(() => {
             if (this.websocketConnection)
@@ -65,7 +67,6 @@ export class MiningHandler extends WebSocketHandler {
   playerInventory: any = {};
 
   harvestResource(resourceID: string) {
-
     return !!resourceID;
   }
 }

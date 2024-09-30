@@ -1,11 +1,12 @@
 import { TiledResource } from "@excaliburjs/plugin-tiled";
-import { Engine, EngineOptions, Loadable, Loader } from "excalibur";
+import { EngineOptions, Loadable, Loader } from "excalibur";
 import { CopperVein } from "./rendering/actors/resources/mining/ores/CopperVein";
 import { ResourceFetcher } from "./rendering/actors/resources/utils/resourceFetcher";
 import { APIImageSource } from "./rendering/image_classes/APIImageSource";
 import { PlayerMiner } from "./rendering/actors/characters/PlayerMiner";
+import { GameEngine } from "./resources/custom_classes/GameEngine";
 
-let GameEngine: Engine = new Engine() as Engine;
+let _gameEngine: GameEngine = new GameEngine();
 const canvasId = 'game';
 
 const gameFieldMetaData: EngineOptions = {
@@ -15,7 +16,14 @@ const gameFieldMetaData: EngineOptions = {
   canvasElementId: canvasId
 }
 
+/**
+ * This is for initializing the game. Currently it will render the loader to the canvas with ID 'game'
+ * 
+ * @returns the game engine that was started by the script
+ */
 const init = () => {
+  // After the game is started, check if 
+
   const loadableResources: Loadable<any>[] = [];
   const imageSource = new APIImageSource('/assets/maps/mining_maps/image_assets/copper_ore_1.png');
   ResourceFetcher.addResources(new Map([[CopperVein.key, imageSource]]));
@@ -43,16 +51,17 @@ const init = () => {
     loadables: [tiledMap, ...(ResourceFetcher.fetchByKeys([CopperVein.key, PlayerMiner.textureKey]) || []), ...loadableResources]
   });
 
-  GameEngine = new Engine(gameFieldMetaData);
-  GameEngine.toggleDebug();
+  _gameEngine = new GameEngine(gameFieldMetaData);
+  // _gameEngine.toggleDebug();
 
-  return GameEngine.start(loader).then(() => {
-    tiledMap.addToScene(GameEngine.currentScene);
+  return _gameEngine.start(loader).then(() => {
+    tiledMap.addToScene(_gameEngine.currentScene);
+    return _gameEngine;
   });
 };
 
 export const gameScript = {
-  getGameEngine: () => GameEngine,
+  getGameEngine: () => _gameEngine,
   canvasId,
   init,
   gameFieldMetaData

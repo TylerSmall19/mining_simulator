@@ -128,7 +128,7 @@ export class PlayerUserDetailsRepo extends BaseRepository {
     if (!this.playerDetailsDB)
       await this.init();
 
-    const playerCollection = this.playerDetailsDB!.collection<PlayerDetails>(this.collectionName);
+    const playerCollection = this.playerDetailsDB?.collection<PlayerDetails>(this.collectionName);
     const newPlayer = {
       playerName: playerOptions.playerName.toString(),
       characters: [],
@@ -145,13 +145,15 @@ export class PlayerUserDetailsRepo extends BaseRepository {
     if (duplicatePlayerName)
       throw new Error('Duplicate playerName found: ' + playerOptions.playerName);
 
-    const result = await playerCollection
-      .insertOne(newPlayer)
-      .catch(logErrorCallback('Player could not be created.'));
+    if (playerCollection) {
+      const result = await playerCollection
+        .insertOne(newPlayer)
+        .catch(logErrorCallback('Player could not be created.'));
 
-    if (result && result.insertedId) {
-      this.user = newPlayer;
-      return newPlayer
+      if (result && result.insertedId) {
+        this.user = newPlayer;
+        return newPlayer
+      }
     }
   }
 
