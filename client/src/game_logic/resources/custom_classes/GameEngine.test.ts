@@ -59,7 +59,7 @@ describe('GameEngine', () => {
     engineToTest.activePlayer = expected;
     expect(engineToTest.activePlayer).toEqual(expected);
     const callback = (e: any) => {
-      expect(e.detail?.activePlayer).toEqual(expected)
+      expect(e.detail?.activePlayer).toEqual(expected);
     }
     window.addEventListener(SET_ACTIVE_PLAYER_EVENT, callback);
 
@@ -76,6 +76,18 @@ describe('GameEngine', () => {
     const engineToTest = new GameEngine({ activePlayer: expected });
     expect(window.localStorage.setItem).toHaveBeenCalledWith(engineToTest._activePlayerStorageKey, JSON.stringify(expected));
     expect(engineToTest.activePlayer).toEqual(expected);
+  });
+
+  it('sets the player to null when given null', () => {
+    jest.spyOn(Storage.prototype, 'setItem');
+    const expected = {
+      _id: 'test-foo',
+      playerName: 'lil bunny_foo-foo'
+    } as PlayerDetails;
+    const engineToTest = new GameEngine({ activePlayer: expected });
+    expect(engineToTest.activePlayer).toEqual(expected);
+    engineToTest.activePlayer = null;
+    expect(engineToTest.activePlayer).toBeNull();
   });
 
   describe('getActivePlayer', () => {

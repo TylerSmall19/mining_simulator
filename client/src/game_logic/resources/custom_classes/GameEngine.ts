@@ -2,11 +2,11 @@ import { Engine, EngineOptions } from "excalibur";
 import { cloneDeep } from "lodash";
 import { PlayerDetails } from "../../../globals/types/ActivePlayerTypes";
 import { SetActivePlayerEvent } from "../../../globals/customEvents";
+import { isEqual } from 'lodash'
 
 export class GameEngine extends Engine {
-  /**
-   *
-   */
+  /** this is in place to prevent render loops when this is consumed in the React hook */
+  private _activePlayerCache: PlayerDetails | null = null;
   private _activePlayer: PlayerDetails | null = null;
   _activePlayerStorageKey = 'activePlayer';
   constructor(options?: EngineOptions & { activePlayer?: PlayerDetails }) {
@@ -23,16 +23,22 @@ export class GameEngine extends Engine {
    */
   get activePlayer() {
     const playerStringFromStorage = window.localStorage.getItem(this._activePlayerStorageKey);
+    let playerToReturn: PlayerDetails | null = null;
     if (playerStringFromStorage) {
       try {
-        return JSON.parse(playerStringFromStorage);
+        playerToReturn = JSON.parse(playerStringFromStorage);
       } catch (e) {
         console.error('Parsing failed:', e);
       }
     } else if (this._activePlayer) {
-      return cloneDeep(this._activePlayer);
+      playerToReturn = cloneDeep(this._activePlayer);
     }
-    return null;
+    if (isEqual(playerToReturn, this._activePlayerCache))
+      return  this._activePlayerCache 
+    else {
+      this._activePlayerCache = playerToReturn;
+      return playerToReturn;
+    }
   }
 
   /**
@@ -45,10 +51,12 @@ export class GameEngine extends Engine {
       window.localStorage.setItem(this._activePlayerStorageKey, JSON.stringify(activePlayer));
       this._activePlayer = activePlayer;
       window.dispatchEvent(new SetActivePlayerEvent({ detail: { activePlayer }}));
+      console.log('Setting player', activePlayer)
     } else {
       window.localStorage.removeItem(this._activePlayerStorageKey);
       window.dispatchEvent(new SetActivePlayerEvent({ detail: undefined}));
-      this.activePlayer = null;
+      this._activePlayer = null;
+      console.log('Removing player', activePlayer)
     }
   }
 }
