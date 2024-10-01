@@ -1,6 +1,6 @@
 import { ChangeEventHandler, FormEventHandler, ReactElement, useCallback, useState } from 'react';
 import { gameScript } from '../game_logic';
-import { Box, Button, FormControl, TextField } from '@mui/material';
+import { Box, Button, FormControl, FormHelperText, TextField } from '@mui/material';
 import { renderingEngine } from '../game_logic/rendering/renderingEngine';
 import { InventoryDisplay } from './InventoryDisplay';
 import { PlayerMiner } from '../game_logic/rendering/actors/characters/PlayerMiner';
@@ -9,6 +9,7 @@ import { ApiUtility } from '../utils/ApiUtility';
 
 export const GameWindow = (props: { children: ReactElement }) => {
   const [playerFormValues, setPlayerFormValues] = useState({ playerName: '' });
+  const [errors, setErrors] = useState<string[]>([]);
   const inventory = usePlayerMinerInventory();
 
   const handleCreate = useCallback<FormEventHandler<HTMLFormElement>>(async (e) => {
@@ -17,10 +18,14 @@ export const GameWindow = (props: { children: ReactElement }) => {
     if (player) {
       gameScript.init();
       renderingEngine.startGame();
-      if (window.localStorage)
+      if (window.localStorage) {
         window.localStorage.setItem('player', JSON.stringify(player));
+        setErrors([]);
+      }
+    } else {
+      setErrors([...errors, 'Unable to create player']);
     }
-  }, [playerFormValues]);
+  }, [playerFormValues, errors]);
 
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>((e) => {
     e.preventDefault();
@@ -28,12 +33,14 @@ export const GameWindow = (props: { children: ReactElement }) => {
       ...playerFormValues,
       [e.target.name]: e.target.value
     });
+    setErrors([]);
   }, [playerFormValues, setPlayerFormValues]);
 
   return (
     <Box>
       <Box sx={{ marginBottom: '15px', marginTop: '15px' }}>
         <FormControl component='form' onSubmit={handleCreate}>
+        {errors.length > 0 && <FormHelperText sx={{fontSize: '.6em'}} error id='input-errors'>{errors.map((err) => <span key={err}>{err}</span>)}</FormHelperText>}
           <TextField
             sx={{ input: { color: 'whitesmoke'}}}
             id='playerName'
@@ -41,10 +48,12 @@ export const GameWindow = (props: { children: ReactElement }) => {
             aria-describedby='my-helper-text'
             value={playerFormValues.playerName}
             onChange={handleChange}
-            helperText='Choose the display name'
+            helperText='Choose your display name'
             label='Player Name'
             variant='outlined'
             color='secondary'
+            error={errors.length > 0}
+            aria-errormessage='input-errors'
           />
           <Button type='submit' variant='contained'>Login</Button>
         </FormControl>
