@@ -1,6 +1,6 @@
 import { ChangeEventHandler, FormEventHandler, ReactElement, useCallback, useState } from 'react';
 import { gameScript } from '../game_logic';
-import { Box, Button, FormControl, FormHelperText, Input, InputLabel, TextField } from '@mui/material';
+import { Box, Button, FormControl, TextField } from '@mui/material';
 import { renderingEngine } from '../game_logic/rendering/renderingEngine';
 import { InventoryDisplay } from './InventoryDisplay';
 import { PlayerMiner } from '../game_logic/rendering/actors/characters/PlayerMiner';
