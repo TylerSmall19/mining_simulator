@@ -7,6 +7,7 @@ import { PlayerMiner } from '../game_logic/rendering/actors/characters/PlayerMin
 import { usePlayerMinerInventory } from '../globals/hooks/useAddItemSubscription';
 import { ApiUtility } from '../utils/ApiUtility';
 import { useActivePlayerSubscription } from '../globals/hooks/useActivePlayerSubscription';
+import { CharacterCreationComponent } from './scenes/CharacterCreationScene';
 
 const Logout = () => {
   const handleLogout = useCallback(() => {
@@ -78,6 +79,8 @@ export const GameWindow = (props: { children: ReactElement }) => {
       {(activePlayer && <Logout />) || <PlayerCreateForm />}
       {/* @TODO: This should change to inventory.ores.itemCount so the player inventory can hold more types of items */}
       {activePlayer && <InventoryDisplay inventory={inventory} itemCount={PlayerMiner.inventory.itemCount} />}
+      {activePlayer && <CharacterCreationComponent />}
+      {/* this is the canvas */}
       {props.children}
     </Box>
   );
