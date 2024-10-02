@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useSyncExternalStore } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 import { SET_ACTIVE_PLAYER_EVENT } from '../customEvents';
 import { gameScript } from '../../game_logic';
 
