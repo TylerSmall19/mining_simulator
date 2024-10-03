@@ -2,6 +2,7 @@ import { AddItemEvent } from "../../globals/customEvents";
 import { MineableMineralTypes } from "../rendering/actors/resources/mining/types/MineableMineralTypes";
 import { InventoryShape } from "./PlayerInventoryTypes";
 import isEqual from 'lodash.isequal';
+import { cloneDeep } from 'lodash'
 
 export class PlayerInventory {
   private _inventory: InventoryShape = {
@@ -45,7 +46,7 @@ export class PlayerInventory {
   */
   get snapshot(): InventoryShape {
     if (!isEqual(this._inventory, this._inventoryCache))
-      this._inventoryCache = JSON.parse(JSON.stringify(this._inventory));
+      this._inventoryCache = cloneDeep(this._inventory);
     return this._inventoryCache
   }
 }
