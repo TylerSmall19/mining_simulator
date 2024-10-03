@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { CharacterStats } from "./StatSelection";
+import { APP_CONFIG } from "../../globals/constants/config_consts";
+import { UIElement, UIWrapper } from "../positioning/UIWrapper";
 
 // Configurable colors and constants
 const config = {
@@ -77,74 +80,72 @@ const CharacterCarousel: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box
-        sx={{
-          width: '800px',
-          height: '600px',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          bgcolor: '#f0f0f0',
-          // background: 'none!important',
-          position: 'relative',
-        }}
-      >
-        {/* Image Container */}
+      <UIWrapper>
         <Box
           sx={{
+            width: `${APP_CONFIG.gameWidth}px`,
+            height: `${APP_CONFIG.gameHeight}px`,
+            overflow: 'hidden',
             display: 'flex',
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            width: '100%',
-            overflow: 'hidden',
+            // bgcolor: '#f0f0f0',
+            // background: 'none!important',
+            position: 'relative',
           }}
         >
-          {/* Previous Button */}
-          <Button
-            onClick={handlePrevious}
-            variant="contained"
-            color="primary"
-            sx={{ position: 'absolute', left: '10px', zIndex: 2 }}
-          >
-            Prev
-          </Button>
-
-          {/* Image Slider */}
+          {/* Image Container */}
           <Box
             sx={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              width: '600px', // Fit 3 images (200px each with some margin)
-              transition: `transform ${config.transitionDuration}ms ease`,
+              width: '100%',
+              overflow: 'hidden',
             }}
           >
-            {visibleImages.map((img, index) => (
-              <Image key={index} src={img.src} isActive={img.isActive} />
-            ))}
+            <UIElement left={20} canInteract>
+              {/* Previous Button */}
+              <Button
+                onClick={handlePrevious}
+                variant="contained"
+                color="primary"
+                sx={{ position: 'absolute', left: '10px' }}
+              >
+                Prev
+              </Button>
+            </UIElement>
+
+            {/* Image Slider */}
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '600px', // Fit 3 images (200px each with some margin)
+                transition: `transform ${config.transitionDuration}ms ease`,
+              }}
+            >
+              {visibleImages.map((img, index) => (
+                <Image key={index} src={img.src} isActive={img.isActive} />
+              ))}
+            </Box>
+
+            {/* Next Button */}
+            <UIElement right={20} canInteract>
+              <Button
+                onClick={handleNext}
+                variant="contained"
+                color="primary"
+              >
+                Next
+              </Button>
+            </UIElement>
           </Box>
-
-          {/* Next Button */}
-          <Button
-            onClick={handleNext}
-            variant="contained"
-            color="primary"
-            sx={{ position: 'absolute', right: '10px', zIndex: 2 }}
-          >
-            Next
-          </Button>
+          <CharacterStats />
         </Box>
-
-        {/* Character Info */}
-        <Box sx={{ marginTop: '20px', textAlign: 'center', color: 'black' }}>
-          <Typography variant="h5" fontWeight='bold'>Character Stats</Typography>
-          <Typography variant="body1">Strength: 80</Typography>
-          <Typography variant="body1">Agility: 65</Typography>
-          <Typography variant="body1">Intelligence: 70</Typography>
-        </Box>
-      </Box>
+      </UIWrapper>
     </ThemeProvider>
   );
 };

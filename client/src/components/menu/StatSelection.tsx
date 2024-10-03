@@ -39,110 +39,114 @@ const CharacterStats: React.FC = () => {
   };
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        padding: '20px',
-        border: '1px solid black',
-        backgroundColor: '#f5f5f5',
-        borderRadius: '8px',
-      }}
-    >
-      <Typography variant="h6" sx={{ marginBottom: '10px' }}>
-        Character Stats (Remaining Points: {remainingPoints})
-      </Typography>
+    // <UIWrapper>
+      <Box
+        sx={{
+          // width: '100%',
+          padding: '20px',
+          border: '1px solid black',
+          backgroundColor: 'red',
+          borderRadius: '8px',
+          color: 'white',
+          fontWeight: '550'
+        }}
+      >
+        <Typography variant="h6" sx={{ marginBottom: '10px' }}>
+          Character Stats (Remaining Points: {remainingPoints})
+        </Typography>
 
-      <Grid2 container spacing={2}>
-        {/* Strength Stat */}
-        <Grid2 size={{ xs:6 }}>
-          <Typography variant="body1">Strength</Typography>
-        </Grid2>
-        <Grid2 size={{ xs:3 }}>
-          <Typography variant="body1">{stats.strength}</Typography>
-        </Grid2>
-        <Grid2 size={{ xs:3 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={remainingPoints <= 0}
-            onClick={() => handleStatChange('strength', config.step)}
-          >
-            +
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleStatChange('strength', -config.step)}
-            sx={{ marginLeft: '5px' }}
-          >
-            -
-          </Button>
+        <Grid2 container spacing={2}>
+          {/* Strength Stat */}
+          <Grid2 size={{ xs:6 }}>
+            <Typography variant="body1">Strength</Typography>
+          </Grid2>
+          <Grid2 size={{ xs:3 }}>
+            <Typography variant="body1">{stats.strength}</Typography>
+          </Grid2>
+          <Grid2 size={{ xs:3 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={remainingPoints <= 0}
+              onClick={() => handleStatChange('strength', config.step)}
+            >
+              +
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleStatChange('strength', -config.step)}
+              sx={{ marginLeft: '5px' }}
+            >
+              -
+            </Button>
+          </Grid2>
+
+          {/* Agility Stat */}
+          <Grid2 size={{ xs:6 }}>
+            <Typography variant="body1">Agility</Typography>
+          </Grid2>
+          <Grid2 size={{ xs:3 }}>
+            <Typography variant="body1">{stats.agility}</Typography>
+          </Grid2>
+          <Grid2 size={{ xs:3 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={remainingPoints <= 0}
+              onClick={() => handleStatChange('agility', config.step)}
+            >
+              +
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleStatChange('agility', -config.step)}
+              sx={{ marginLeft: '5px' }}
+            >
+              -
+            </Button>
+          </Grid2>
+
+          {/* Intelligence Stat */}
+          <Grid2 size={{ xs:6 }}>
+            <Typography variant="body1">Intelligence</Typography>
+          </Grid2>
+          <Grid2 size={{ xs:3 }}>
+            <Typography variant="body1">{stats.intelligence}</Typography>
+          </Grid2>
+          <Grid2 size={{ xs:3 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={remainingPoints <= 0}
+              onClick={() => handleStatChange('intelligence', config.step)}
+            >
+              +
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleStatChange('intelligence', -config.step)}
+              sx={{ marginLeft: '5px' }}
+            >
+              -
+            </Button>
+          </Grid2>
         </Grid2>
 
-        {/* Agility Stat */}
-        <Grid2 size={{ xs:6 }}>
-          <Typography variant="body1">Agility</Typography>
-        </Grid2>
-        <Grid2 size={{ xs:3 }}>
-          <Typography variant="body1">{stats.agility}</Typography>
-        </Grid2>
-        <Grid2 size={{ xs:3 }}>
+        {/* Button to finalize selection */}
+        <Box sx={{ marginTop: '20px', textAlign: 'center' }}>
           <Button
             variant="contained"
             color="primary"
-            disabled={remainingPoints <= 0}
-            onClick={() => handleStatChange('agility', config.step)}
+            onClick={() => alert(`Selected Stats: ${JSON.stringify(stats)}`)}
           >
-            +
+            Finalize Selection
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleStatChange('agility', -config.step)}
-            sx={{ marginLeft: '5px' }}
-          >
-            -
-          </Button>
-        </Grid2>
-
-        {/* Intelligence Stat */}
-        <Grid2 size={{ xs:6 }}>
-          <Typography variant="body1">Intelligence</Typography>
-        </Grid2>
-        <Grid2 size={{ xs:3 }}>
-          <Typography variant="body1">{stats.intelligence}</Typography>
-        </Grid2>
-        <Grid2 size={{ xs:3 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={remainingPoints <= 0}
-            onClick={() => handleStatChange('intelligence', config.step)}
-          >
-            +
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleStatChange('intelligence', -config.step)}
-            sx={{ marginLeft: '5px' }}
-          >
-            -
-          </Button>
-        </Grid2>
-      </Grid2>
-
-      {/* Button to finalize selection */}
-      <Box sx={{ marginTop: '20px', textAlign: 'center' }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => alert(`Selected Stats: ${JSON.stringify(stats)}`)}
-        >
-          Finalize Selection
-        </Button>
+        </Box>
       </Box>
-    </Box>
+    // </UIWrapper>
   );
 };
 

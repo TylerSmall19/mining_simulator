@@ -31,8 +31,7 @@ export class CharacterCreationScene extends Scene {
 
 export const CharacterCreationComponent = () => {
   return (
-    <Box component='div' sx={{ 
-      background: 'red', 
+    <Box component='div' sx={{
       maxWidth: APP_CONFIG.gameWidth, 
       maxHeight: APP_CONFIG.gameHeight 
     }}>
