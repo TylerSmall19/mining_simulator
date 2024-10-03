@@ -1,37 +1,46 @@
-import React, { useEffect, useState, ReactNode, ReactElement, Children, useRef } from 'react';
+import React, { useEffect, useState, ReactNode, ReactElement, Children } from 'react';
+import { gameScript } from '../../game_logic';
+import { APP_CONFIG } from '../../globals/constants/config_consts';
 
 interface UIWrapperProps {
-  canvas: ReactNode;
   children: ReactNode;
 }
 
-// @TODO: Find out how to use the game canvas provided instead.
-export const UIWrapper: React.FC<UIWrapperProps> = ({ canvas, children }) => {
+export const UIWrapper: React.FC<UIWrapperProps> = ({ children }) => {
   const [scaleFactor, setScaleFactor] = useState(1);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  let width: number | null, height: number | null, canvasId: string | null = null;
-  if (canvasRef.current) {
-    width = canvasRef.current.width;
-    height = canvasRef.current.height;
-    canvasId = canvasRef.current.id;
-  }
-
-  // <UIWrapper canvas={props.children}>
-  //   <UIElement x={35} y={375}>
-  //     <button style={{zIndex: 24}}>Click me!</button>
-  //   </UIElement>
-  //   <UIElement x={840} y={130}>
-  //     <div style={{ maxWidth: '7ch' }}>Another element</div>
-  //   </UIElement>
-  // </UIWrapper>
+  const [positionState, setPositionState] = useState({
+    x: 0,
+    y: 0,
+    height: APP_CONFIG.gameHeight,
+    width: APP_CONFIG.gameWidth
+  });
 
   // Monitor canvas size and adjust scale factor for UI elements
   useEffect(() => {
-    const canvasElement = document.getElementById(canvasId ?? '') as HTMLCanvasElement;
     const handleResize = () => {
+      const canvasElement = gameScript.getGameEngine().canvas;
+
+      if (canvasElement) {
+        const rect = canvasElement.getBoundingClientRect()
+        if (
+          rect.x !== positionState.x 
+          || rect.y !== positionState.y
+          || rect.height !== positionState.height
+          || rect.width !== positionState.width
+        ) {
+          setPositionState({
+            ...positionState,
+            x: rect.x,
+            y: rect.y,
+            height: rect.height,
+            width: rect.width
+          })
+        }
+      }
+
       if (canvasElement) {
         const { width: currWidth, height: currHeight } = canvasElement.getBoundingClientRect();
-        setScaleFactor(Math.min(currWidth / (width ?? 800), currHeight / (height ?? 600)));
+        setScaleFactor(Math.min(currWidth / APP_CONFIG.gameWidth, currHeight / APP_CONFIG.gameHeight));
       }
     };
 
@@ -41,14 +50,20 @@ export const UIWrapper: React.FC<UIWrapperProps> = ({ canvas, children }) => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [positionState]);
+
+  if (!gameScript.getGameEngine().isRunning())
+    return null;
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      {/* Canvas for game */}
-      <div id="canvas-container" style={{ position: 'absolute', top: 0, left: 0 }}>
-        {React.cloneElement(canvas as ReactElement, { ref: canvasRef })}
-      </div>
+    <div style={{
+      position: 'absolute',
+      left: positionState.x,
+      top: positionState.y,
+      width: positionState.width + 'px',
+      height: positionState.height + 'px',
+      pointerEvents: 'none'
+    }}>
 
       {/* Iterate over children and apply absolute positioning individually */}
       {Children.map(children, (child) => {
@@ -68,19 +83,26 @@ export const UIWrapper: React.FC<UIWrapperProps> = ({ canvas, children }) => {
 };
 
 interface UIElementProps {
-  x: number;
-  y: number;
+  top?: number;
+  left?: number;
+  right?: number;
+  bottom?: number;
   children: ReactNode;
+  canInteract?: boolean
 }
 
-export const UIElement: React.FC<UIElementProps> = ({ x, y, children }) => {
+export const UIElement: React.FC<UIElementProps> = ({ children, canInteract, top, bottom, right, left }) => {
   return (
     <div
       style={{
-        position: 'relative',
-        top: `${y}px`,
-        left: `${x}px`,
-        // transform: 'translate(-50%, -50%)', // Adjust to center based on x, y
+        position: 'absolute',
+        top: top !== undefined ? `${top}px` : undefined,
+        left: left !== undefined ? `${left}px` : undefined,
+        right: right !== undefined ? `${right}px` : undefined,
+        bottom: bottom !== undefined ? `${bottom}px` : undefined,
+        zIndex: canInteract ? 3 : 2,
+        pointerEvents: canInteract ? 'auto' : 'none',
+        display: 'inline'
       }}
     >
       {children}

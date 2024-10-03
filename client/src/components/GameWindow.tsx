@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FormEventHandler, ReactElement, useCallback, useState } from 'react';
+import { ChangeEventHandler, FormEventHandler, ReactElement, useCallback, useEffect, useState } from 'react';
 import { gameScript } from '../game_logic';
 import { Box, Button, FormControl, FormHelperText, TextField } from '@mui/material';
 import { renderingEngine } from '../game_logic/rendering/renderingEngine';
@@ -20,6 +20,11 @@ const Logout = () => {
   );
 };
 
+const startTheGame = () => {
+  gameScript.init();
+  renderingEngine.startGame();
+}
+
 const PlayerCreateForm = () => {
   const [playerFormValues, setPlayerFormValues] = useState({ playerName: '' });
   const [errors, setErrors] = useState<string[]>([]);
@@ -29,8 +34,7 @@ const PlayerCreateForm = () => {
     const player = await ApiUtility.createPlayer(playerFormValues)
     if (player) {
       gameScript.getGameEngine().activePlayer = player;
-      gameScript.init();
-      renderingEngine.startGame();
+      startTheGame();
     } else {
       setErrors([...errors, 'Unable to create player']);
     }
@@ -72,8 +76,15 @@ const PlayerCreateForm = () => {
 export const GameWindow = (props: { children: ReactElement }) => {
   const inventory = usePlayerMinerInventory();
   const activePlayer = useActivePlayerSubscription();
-  if (!activePlayer)
+
+  useEffect(() => {
+    if (activePlayer && !gameScript.getGameEngine().isRunning())
+      startTheGame();
+  }, [activePlayer])
+
+  if(!activePlayer)
     gameScript.getGameEngine().stop();
+
   return (
     <Box>
       {(activePlayer && <Logout />) || <PlayerCreateForm />}
