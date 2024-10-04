@@ -1,18 +1,18 @@
-import { ChangeEventHandler, FormEventHandler, ReactElement, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, ReactElement, useEffect, useState } from 'react';
 import { gameScript } from '../game_logic';
 import { Box, Button, FormControl, FormHelperText, TextField } from '@mui/material';
 import { renderingEngine } from '../game_logic/rendering/renderingEngine';
 import { InventoryDisplay } from './InventoryDisplay';
 import { PlayerMiner } from '../game_logic/rendering/actors/characters/PlayerMiner';
-import { usePlayerMinerInventory } from '../globals/hooks/useAddItemSubscription';
+import { usePlayerMinerInventory } from '../shared/hooks/useAddItemSubscription';
 import { ApiUtility } from '../utils/ApiUtility';
-import { useActivePlayerSubscription } from '../globals/hooks/useActivePlayerSubscription';
+import { useActivePlayerSubscription } from '../shared/hooks/useActivePlayerSubscription';
 import { CharacterCreationComponent } from './scenes/CharacterCreationScene';
 
 const Logout = () => {
-  const handleLogout = useCallback(() => {
+  const handleLogout = () => {
     gameScript.getGameEngine().activePlayer = null;
-  }, []);
+  };
   return (
     <Button variant='contained' onClick={handleLogout}>
       Logout
@@ -22,6 +22,12 @@ const Logout = () => {
 
 const startTheGame = () => {
   gameScript.init();
+  const activePlayer = gameScript.getGameEngine().activePlayer;
+  if (activePlayer) {
+    if (activePlayer.characters.length > 0) {
+      
+    }
+  }
   renderingEngine.startGame();
 }
 
@@ -29,7 +35,7 @@ const PlayerCreateForm = () => {
   const [playerFormValues, setPlayerFormValues] = useState({ playerName: '' });
   const [errors, setErrors] = useState<string[]>([]);
 
-  const handleCreate = useCallback<FormEventHandler<HTMLFormElement>>(async (e) => {
+  const handleCreate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const player = await ApiUtility.createPlayer(playerFormValues)
     if (player) {
@@ -38,16 +44,16 @@ const PlayerCreateForm = () => {
     } else {
       setErrors([...errors, 'Unable to create player']);
     }
-  }, [playerFormValues, errors]);
+  };
 
-  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>((e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.preventDefault();
     setPlayerFormValues({
       ...playerFormValues,
       [e.target.name]: e.target.value
     });
     setErrors([]);
-  }, [playerFormValues, setPlayerFormValues]);
+  };
 
   return (
     <Box sx={{ marginBottom: '15px', marginTop: '15px' }}>
