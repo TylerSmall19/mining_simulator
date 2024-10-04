@@ -1,5 +1,5 @@
-import { SET_ACTIVE_PLAYER_EVENT, SetActivePlayerEvent, SetActivePlayerShape } from "../../../globals/customEvents";
-import { PlayerDetails } from "../../../globals/types/ActivePlayerTypes";
+import { SET_ACTIVE_PLAYER_EVENT } from "../../../shared/customEvents";
+import { PlayerDetails } from "../../../types/ActivePlayerTypes";
 import { GameEngine } from "./GameEngine";
 
 describe('GameEngine', () => {
@@ -89,6 +89,8 @@ describe('GameEngine', () => {
     engineToTest.activePlayer = null;
     expect(engineToTest.activePlayer).toBeNull();
   });
+
+  it.todo('Work on refactoring the UIWrapper canvas')
 
   describe('getActivePlayer', () => {
     it('can fetch the player as an object from localStorage', () => {

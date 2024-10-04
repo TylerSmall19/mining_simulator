@@ -5,7 +5,7 @@ import { ResourceFetcher } from "./rendering/actors/resources/utils/resourceFetc
 import { APIImageSource } from "./rendering/image_classes/APIImageSource";
 import { PlayerMiner } from "./rendering/actors/characters/PlayerMiner";
 import { GameEngine } from "./resources/custom_classes/GameEngine";
-import { APP_CONFIG } from "../globals/constants/config_consts";
+import { APP_CONFIG } from "../shared/constants/config_consts";
 
 let _gameEngine: GameEngine = new GameEngine();
 const canvasId = 'game';

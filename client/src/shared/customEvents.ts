@@ -1,5 +1,5 @@
 import { InventoryShape } from "../game_logic/inventory/PlayerInventoryTypes";
-import { PlayerDetails } from "./types/ActivePlayerTypes";
+import { PlayerDetails } from "../types/ActivePlayerTypes";
 
 export const ADD_ITEM_EVENT = 'addItemToInventory';
 export const SET_ACTIVE_PLAYER_EVENT = 'setActivePlayerEvent'

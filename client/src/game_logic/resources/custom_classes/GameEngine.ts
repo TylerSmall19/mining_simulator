@@ -1,7 +1,7 @@
 import { Engine, EngineOptions } from "excalibur";
 import { cloneDeep } from "lodash";
-import { PlayerDetails } from "../../../globals/types/ActivePlayerTypes";
-import { SetActivePlayerEvent } from "../../../globals/customEvents";
+import { PlayerDetails } from "../../../types/ActivePlayerTypes";
+import { SetActivePlayerEvent } from "../../../shared/customEvents";
 import { isEqual } from 'lodash'
 
 export class GameEngine extends Engine {
