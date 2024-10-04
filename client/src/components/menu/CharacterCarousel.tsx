@@ -3,15 +3,16 @@ import { Box, Button } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CharacterStats } from "./StatSelection";
-import { APP_CONFIG } from "../../globals/constants/config_consts";
+import { APP_CONFIG } from "../../shared/constants/config_consts";
 import { UIElement, UIWrapper } from "../positioning/UIWrapper";
+import { CharacterStatsShape } from "../../types/CharacterStatsShape";
 
 // Configurable colors and constants
 const config = {
   buttonColor: '#1976d2',
   activeImageBorderColor: '#ff9800',
   activeImageShadowColor: 'rgba(0, 0, 0, 0.6)',
-  inactiveImageOpacity: 0.7,
+  inactiveImageOpacity: 0.8,
   transitionDuration: 750, // in ms
 };
 
@@ -54,6 +55,10 @@ const CharacterCarousel: React.FC = () => {
     );
   };
 
+  const handleCharacterStatConfirmation = (characterStatsValues: CharacterStatsShape) => {
+    alert(JSON.stringify(characterStatsValues));
+  }
+
   // Get the currently visible images (3 at a time)
   const getVisibleImages = () => {
     const images = [];
@@ -90,9 +95,6 @@ const CharacterCarousel: React.FC = () => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            // bgcolor: '#f0f0f0',
-            // background: 'none!important',
-            position: 'relative',
           }}
         >
           {/* Image Container */}
@@ -103,9 +105,12 @@ const CharacterCarousel: React.FC = () => {
               alignItems: 'center',
               width: '100%',
               overflow: 'hidden',
+              height: '50%',
+              top: 0,
+              position: "absolute",
             }}
           >
-            <UIElement left={20} canInteract>
+            <UIElement left={15} top={140} canInteract>
               {/* Previous Button */}
               <Button
                 onClick={handlePrevious}
@@ -133,7 +138,7 @@ const CharacterCarousel: React.FC = () => {
             </Box>
 
             {/* Next Button */}
-            <UIElement right={20} canInteract>
+            <UIElement right={20} top={140} canInteract>
               <Button
                 onClick={handleNext}
                 variant="contained"
@@ -143,7 +148,7 @@ const CharacterCarousel: React.FC = () => {
               </Button>
             </UIElement>
           </Box>
-          <CharacterStats />
+          <CharacterStats onConfirmation={handleCharacterStatConfirmation} />
         </Box>
       </UIWrapper>
     </ThemeProvider>

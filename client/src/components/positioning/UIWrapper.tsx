@@ -1,11 +1,14 @@
 import React, { useEffect, useState, ReactNode, ReactElement, Children } from 'react';
 import { gameScript } from '../../game_logic';
-import { APP_CONFIG } from '../../globals/constants/config_consts';
+import { APP_CONFIG } from '../../shared/constants/config_consts';
 
 interface UIWrapperProps {
   children: ReactNode;
 }
 
+/** This will wrap its children and bind them to the game's UI. It will be within the window and will resize when the
+ * window resizes
+ */
 export const UIWrapper: React.FC<UIWrapperProps> = ({ children }) => {
   const [scaleFactor, setScaleFactor] = useState(1);
   const [positionState, setPositionState] = useState({
@@ -100,7 +103,7 @@ export const UIElement: React.FC<UIElementProps> = ({ children, canInteract, top
         left: left !== undefined ? `${left}px` : undefined,
         right: right !== undefined ? `${right}px` : undefined,
         bottom: bottom !== undefined ? `${bottom}px` : undefined,
-        zIndex: canInteract ? 3 : 2,
+        zIndex: canInteract ? 5 : 2,
         pointerEvents: canInteract ? 'auto' : 'none',
         display: 'inline'
       }}

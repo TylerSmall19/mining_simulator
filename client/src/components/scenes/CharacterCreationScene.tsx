@@ -2,7 +2,7 @@ import { Scene, SceneActivationContext } from 'excalibur';
 import { GameEngine } from '../../game_logic/resources/custom_classes/GameEngine';
 import { APIImageSource } from '../../game_logic/rendering/image_classes/APIImageSource';
 import { Box, Grid2 } from '@mui/material';
-import { APP_CONFIG } from '../../globals/constants/config_consts';
+import { APP_CONFIG } from '../../shared/constants/config_consts';
 import { CharacterCarousel } from '../menu/CharacterCarousel';
 
 export class CharacterCreationScene extends Scene {
